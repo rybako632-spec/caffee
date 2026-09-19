@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bakery - Coffee Specials</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Cormorant Garamond', serif;
+      background-color: #E8EEF3;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 20px 10px;
+    }
+
+    .navbar {
+      background: white;
+      width: 100%;
+      max-width: 600px;
+      padding: 15px 25px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-radius: 12px 12px 0 0;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+    }
+
+    .brand {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      font-size: 1.1rem;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #2D2522;
+      text-decoration: none;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 15px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: #726A66;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      transition: color 0.2s;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active {
+      color: #8C6A5A;
+      border-bottom: 2px solid #8C6A5A;
+    }
+
+    .menu-page {
+      background-color: #FFFFFF;
+      width: 100%;
+      max-width: 600px;
+      min-height: 800px;
+      border-radius: 0 0 12px 12px;
+      padding: 30px;
+      position: relative;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      overflow: hidden;
+    }
+
+    .page-title-box {
+      background-color: #EAE3DC;
+      display: inline-block;
+      padding: 12px 30px;
+      margin-top: 10px;
+      margin-left: 20px;
+      position: relative;
+      z-index: 3;
+    }
+
+    .page-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 2.2rem;
+      font-weight: 700;
+      letter-spacing: 3px;
+      color: #221D1B;
+      text-transform: uppercase;
+      line-height: 1.1;
+    }
+
+    .bg-photo {
+      position: absolute;
+      top: 100px;
+      left: 30px;
+      width: 320px;
+      height: 520px;
+      object-fit: cover;
+      z-index: 1;
+    }
+
+    .menu-card {
+      position: absolute;
+      top: 220px;
+      right: 30px;
+      width: 350px;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(5px);
+      padding: 30px 25px;
+      z-index: 2;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+      max-height: 500px;
+      overflow-y: auto;
+    }
+
+    .menu-list {
+      list-style: none;
+    }
+
+    .menu-item {
+      margin-bottom: 22px;
+      border-bottom: 1px solid #ECE3DC;
+      padding-bottom: 12px;
+      cursor: pointer;
+      transition: transform 0.2s ease, opacity 0.2s ease;
+    }
+
+    .menu-item:hover {
+      transform: translateX(5px);
+      opacity: 0.8;
+    }
+
+    .menu-item:last-child {
+      border-bottom: none;
+      margin-bottom: 0;
+      padding-bottom: 0;
+    }
+
+    .item-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 10px;
+    }
+
+    .item-name {
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: #937161;
+    }
+
+    .item-price {
+      font-size: 1.15rem;
+      color: #8C827A;
+      font-weight: 500;
+      white-space: nowrap;
+    }
+
+    .item-desc {
+      font-size: 0.85rem;
+      color: #918880;
+      margin-top: 4px;
+      line-height: 1.3;
+    }
+
+    .item-weight {
+      font-size: 0.8rem;
+      color: #8C6A5A;
+      margin-top: 4px;
+      font-weight: 600;
+    }
+
+    .empty-message {
+      text-align: center;
+      color: #918880;
+      padding: 30px 10px;
+      font-size: 1rem;
+    }
+
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      backdrop-filter: blur(4px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-card {
+      background: white;
+      width: 90%;
+      max-width: 400px;
+      padding: 25px;
+      border-radius: 12px;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+      transform: translateY(20px) scale(0.95);
+      transition: transform 0.3s ease;
+      position: relative;
+      text-align: center;
+    }
+
+    .modal-overlay.active .modal-card {
+      transform: translateY(0) scale(1);
+    }
+
+    .modal-img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-bottom: 15px;
+    }
+
+    .modal-title {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.6rem;
+      color: #221D1B;
+      margin-bottom: 5px;
+    }
+
+    .modal-weight {
+      font-size: 1rem;
+      color: #8C6A5A;
+      font-weight: 600;
+      margin-bottom: 10px;
+    }
+
+    .modal-price {
+      font-size: 1.3rem;
+      font-weight: 700;
+      color: #937161;
+      margin-bottom: 15px;
+    }
+
+    .modal-desc {
+      font-size: 0.95rem;
+      color: #726A66;
+      line-height: 1.4;
+    }
+
+    .close-btn {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+      background: none;
+      border: none;
+      font-size: 1.8rem;
+      color: #8C827A;
+      cursor: pointer;
+      z-index: 2;
+    }
+
+    @media (max-width: 700px) {
+      body {
+        padding: 10px 0;
+      }
+
+      .navbar {
+        border-radius: 0;
+      }
+
+      .menu-page {
+        border-radius: 0;
+        min-height: 750px;
+        padding: 20px 15px;
+      }
+
+      .page-title-box {
+        margin-left: 5px;
+      }
+
+      .page-title {
+        font-size: 1.8rem;
+      }
+
+      .bg-photo {
+        left: 15px;
+        width: calc(100% - 30px);
+        height: 500px;
+      }
+
+      .menu-card {
+        left: 15px;
+        right: 15px;
+        width: auto;
+        top: 220px;
+      }
+
+      .nav-links {
+        gap: 8px;
+      }
+
+      .nav-links a {
+        font-size: 0.78rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <nav class="navbar">
+    <a href="index.html" class="brand">Bakery</a>
+
+    <ul class="nav-links">
+      <li><a href="index.html">Główna</a></li>
+      <li><a href="menu.html">Menu</a></li>
+      <li><a href="coffee.html" class="active">Coffee</a></li>
+    </ul>
+  </nav>
+
+  <div class="menu-page">
+
+    <div class="page-title-box">
+      <h1 class="page-title">
+        COFFEE<br>
+        SPECIALS
+      </h1>
+    </div>
+
+    <!-- ГЛАВНОЕ ФОТО НИКОГДА НЕ МЕНЯЕТСЯ -->
+    <img
+      class="bg-photo"
+      id="bgPhoto"
+      src="https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop"
+      alt="Coffee"
+    >
+
+    <div class="menu-card">
+      <ul class="menu-list" id="coffeeList">
+        <li class="empty-message">
+          Ładowanie menu...
+        </li>
+      </ul>
+    </div>
+
+  </div>
+
+  <div class="modal-overlay" id="dishModal">
+
+    <div class="modal-card">
+
+      <button class="close-btn" id="closeModal">
+        &times;
+      </button>
+
+      <img
+        src=""
+        alt="Photo"
+        class="modal-img"
+        id="modalImg"
+      >
+
+      <h2 class="modal-title" id="modalTitle"></h2>
+
+      <div class="modal-weight" id="modalWeight"></div>
+
+      <div class="modal-price" id="modalPrice"></div>
+
+      <p class="modal-desc" id="modalDesc"></p>
+
+    </div>
+
+  </div>
+
+  <script type="module">
+
+    import {
+      initializeApp
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+    import {
+      getDatabase,
+      ref,
+      onValue
+    } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+
+    const firebaseConfig = {
+
+      apiKey: "AIzaSyDMCP6zNsRqw6fH4DBNUTG-Nqq_T_hUXv4",
+
+      authDomain: "caffe-23.firebaseapp.com",
+
+      databaseURL:
+        "https://caffe-23-default-rtdb.europe-west1.firebasedatabase.app",
+
+      projectId: "caffe-23",
+
+      storageBucket:
+        "caffe-23.firebasestorage.app",
+
+      messagingSenderId:
+        "768137369524",
+
+      appId:
+        "1:768137369524:web:50e6c4297a6af9cd4644e1",
+
+      measurementId: "G-DBJ0E90LP9"
+    };
+
+
+    const app = initializeApp(firebaseConfig);
+
+    const db = getDatabase(app);
+
+
+    const coffeeList =
+      document.getElementById("coffeeList");
+
+    const modal =
+      document.getElementById("dishModal");
+
+    const closeModal =
+      document.getElementById("closeModal");
+
+    const modalImg =
+      document.getElementById("modalImg");
+
+    const modalTitle =
+      document.getElementById("modalTitle");
+
+    const modalWeight =
+      document.getElementById("modalWeight");
+
+    const modalPrice =
+      document.getElementById("modalPrice");
+
+    const modalDesc =
+      document.getElementById("modalDesc");
+
+
+    closeModal.addEventListener("click", () => {
+      modal.classList.remove("active");
+    });
+
+
+    modal.addEventListener("click", (event) => {
+
+      if (event.target === modal) {
+        modal.classList.remove("active");
+      }
+
+    });
+
+
+    function formatPrice(price) {
+
+      if (
+        price === null ||
+        price === undefined ||
+        price === ""
+      ) {
+        return "0 zł";
+      }
+
+      let value = String(price).trim();
+
+      if (
+        !value.toLowerCase().includes("zł") &&
+        !value.toLowerCase().includes("zl")
+      ) {
+        value += " zł";
+      }
+
+      return value;
+    }
+
+
+    function escapeHTML(value) {
+
+      return String(value)
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+    }
+
+
+    function renderDishes(dishes) {
+
+      coffeeList.innerHTML = "";
+
+
+      if (!dishes.length) {
+
+        coffeeList.innerHTML = `
+          <li class="empty-message">
+            Brak dań w tej kategorii.
+          </li>
+        `;
+
+        return;
+      }
+
+
+      dishes.forEach((item) => {
+
+        const li =
+          document.createElement("li");
+
+        li.className = "menu-item";
+
+
+        const price =
+          formatPrice(item.price);
+
+
+        const weight =
+          item.weight
+            ? `${item.weight} g`
+            : "";
+
+
+        li.innerHTML = `
+
+          <div class="item-header">
+
+            <span class="item-name">
+              ${escapeHTML(item.title || "")}
+            </span>
+
+            <span class="item-price">
+              ${escapeHTML(price)}
+            </span>
+
+          </div>
+
+          ${
+            item.description
+              ? `
+                <div class="item-desc">
+                  ${escapeHTML(item.description)}
+                </div>
+              `
+              : ""
+          }
+
+          ${
+            weight
+              ? `
+                <div class="item-weight">
+                  ${escapeHTML(weight)}
+                </div>
+              `
+              : ""
+          }
+
+        `;
+
+
+        li.addEventListener("click", () => {
+
+          const image =
+            item.imageUrl ||
+            "https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?q=80&w=800&auto=format&fit=crop";
+
+
+          /*
+           * ВАЖНО:
+           * bgPhoto НЕ меняем.
+           * Главное фото Coffee остаётся постоянным.
+           */
+
+          modalImg.src = image;
+
+          modalTitle.textContent =
+            item.title || "";
+
+          modalWeight.textContent =
+            item.weight
+              ? `${item.weight} g`
+              : "";
+
+          modalPrice.textContent =
+            price;
+
+          modalDesc.textContent =
+            item.description || "";
+
+
+          modal.classList.add("active");
+
+        });
+
+
+        coffeeList.appendChild(li);
+
+      });
+
+    }
+
+
+    const dishesRef =
+      ref(db, "dishes");
+
+
+    onValue(
+
+      dishesRef,
+
+      (snapshot) => {
+
+        const data =
+          snapshot.val();
+
+        const dishes = [];
+
+
+        if (data) {
+
+          Object.entries(data).forEach(
+            ([id, item]) => {
+
+              if (
+                item &&
+                item.category === "coffee"
+              ) {
+
+                dishes.push({
+
+                  id,
+
+                  title:
+                    item.title || "",
+
+                  category:
+                    item.category || "",
+
+                  price:
+                    item.price || "",
+
+                  weight:
+                    item.weight ?? null,
+
+                  description:
+                    item.description || "",
+
+                  imageUrl:
+                    item.imageUrl || "",
+
+                  createdAt:
+                    item.createdAt || ""
+
+                });
+
+              }
+
+            }
+          );
+
+        }
+
+
+        dishes.sort((a, b) => {
+
+          return String(b.createdAt)
+            .localeCompare(
+              String(a.createdAt)
+            );
+
+        });
+
+
+        renderDishes(dishes);
+
+      },
+
+      (error) => {
+
+        console.error(error);
+
+        coffeeList.innerHTML = `
+          <li class="empty-message">
+            Ошибка загрузки меню.
+          </li>
+        `;
+
+      }
+
+    );
+
+  </script>
+
+</body>
+</html>
