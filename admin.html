@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="pl">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Админ-панель — Caffe-23</title>
+  <title>Panel administratora — Caffe-23</title>
 
   <style>
     * {
@@ -364,20 +364,20 @@
 
 <body>
 
-  <!-- LOGIN -->
+  <!-- LOGOWANIE -->
   <div class="login-screen" id="loginScreen">
     <div class="login-box">
       <h1>🔐 Caffe-23</h1>
-      <p>Вход в панель администратора</p>
+      <p>Logowanie do panelu administratora</p>
 
       <form id="loginForm">
 
         <div class="field">
-          <label>Email</label>
+          <label>E-mail</label>
           <input
             type="email"
             id="loginEmail"
-            placeholder="Введите email"
+            placeholder="Wpisz e-mail"
             required
           >
         </div>
@@ -385,18 +385,18 @@
         <br>
 
         <div class="field">
-          <label>Пароль</label>
+          <label>Hasło</label>
           <input
             type="password"
             id="loginPassword"
-            placeholder="Введите пароль"
+            placeholder="Wpisz hasło"
             required
           >
         </div>
 
         <div class="buttons">
           <button class="btn btn-primary" type="submit">
-            Войти
+            Zaloguj się
           </button>
         </div>
 
@@ -414,12 +414,12 @@
       <div class="header-inner">
 
         <div>
-          <h1>☕ Caffe-23 — Админ-панель</h1>
+          <h1>☕ Caffe-23 — Panel administratora</h1>
           <div class="user-email" id="userEmail"></div>
         </div>
 
         <button class="logout-btn" id="logoutBtn">
-          Выйти
+          Wyloguj się
         </button>
 
       </div>
@@ -428,37 +428,37 @@
 
     <main>
 
-      <!-- ADD / EDIT -->
+      <!-- DODAJ / EDYTUJ -->
       <section class="form-box">
 
-        <h2 id="formTitle">Добавить блюдо</h2>
+        <h2 id="formTitle">Dodaj pozycję</h2>
 
         <form id="dishForm">
 
           <div class="form-grid">
 
             <div class="field">
-              <label>Название</label>
+              <label>Nazwa</label>
               <input
                 type="text"
                 id="dishTitle"
-                placeholder="Например: Cappuccino"
+                placeholder="Na przykład: Cappuccino"
                 required
               >
             </div>
 
             <div class="field">
-              <label>Категория</label>
+              <label>Kategoria</label>
 
               <select id="dishCategory" required>
-                <option value="coffee">Кофе</option>
-                <option value="bread">Выпечка</option>
+                <option value="coffee">Kawa</option>
+                <option value="bread">Wypieki</option>
               </select>
 
             </div>
 
             <div class="field">
-              <label>Цена</label>
+              <label>Cena</label>
               <input
                 type="text"
                 id="dishPrice"
@@ -468,7 +468,7 @@
             </div>
 
             <div class="field">
-              <label>Вес</label>
+              <label>Waga / Pojemność</label>
               <input
                 type="text"
                 id="dishWeight"
@@ -477,18 +477,18 @@
             </div>
 
             <div class="field full">
-              <label>Описание</label>
+              <label>Opis</label>
 
               <textarea
                 id="dishDescription"
-                placeholder="Описание блюда..."
+                placeholder="Opis pozycji..."
               ></textarea>
 
             </div>
 
             <div class="field full">
 
-              <label>Фото</label>
+              <label>Zdjęcie</label>
 
               <input
                 type="file"
@@ -499,7 +499,7 @@
               <img
                 id="photoPreview"
                 class="photo-preview"
-                alt="preview"
+                alt="podgląd"
               >
 
             </div>
@@ -513,7 +513,7 @@
               class="btn btn-primary"
               id="saveBtn"
             >
-              Добавить блюдо
+              Dodaj pozycję
             </button>
 
             <button
@@ -522,7 +522,7 @@
               id="cancelEditBtn"
               style="display:none"
             >
-              Отмена
+              Anuluj
             </button>
 
           </div>
@@ -534,11 +534,11 @@
       </section>
 
 
-      <!-- DISHES -->
+      <!-- POZYCJE -->
       <section>
 
         <div class="dishes-title">
-          <h2>Все блюда</h2>
+          <h2>Wszystkie pozycje</h2>
         </div>
 
         <div
@@ -546,7 +546,7 @@
           id="dishesList"
         >
           <div class="loading">
-            Загрузка...
+            Ładowanie...
           </div>
         </div>
 
@@ -608,7 +608,7 @@
 
 
     /* =========================
-       ELEMENTS
+       ELEMENTY
     ========================= */
 
     const loginScreen =
@@ -680,31 +680,31 @@
 
 
     /* =========================
-       ПРИНУДИТЕЛЬНЫЙ LOGOUT
+       WYMUSZONE WYLOGOWANIE
        =========================
 
-       Каждый раз при открытии admin.html
-       пользователь будет разлогинен.
+       Za każdym razem przy otwarciu admin.html
+       użytkownik zostanie wylogowany.
 
-       Поэтому пароль нужно вводить заново.
+       Dlatego hasło należy wprowadzić ponownie.
     */
 
     try {
       await signOut(auth);
     } catch (error) {
-      console.log("No previous session");
+      console.log("Brak poprzedniej sesji");
     }
 
 
     /* =========================
-       LOGIN
+       LOGOWANIE
     ========================= */
 
     loginForm.addEventListener("submit", async (e) => {
 
       e.preventDefault();
 
-      loginMessage.textContent = "Вход...";
+      loginMessage.textContent = "Logowanie...";
 
       try {
 
@@ -721,7 +721,7 @@
         console.error(error);
 
         loginMessage.textContent =
-          "Неверный email или пароль.";
+          "Nieprawidłowy e-mail lub hasło.";
 
       }
 
@@ -729,7 +729,7 @@
 
 
     /* =========================
-       AUTH STATE
+       STAN AUTORYZACJI
     ========================= */
 
     onAuthStateChanged(auth, (user) => {
@@ -757,7 +757,7 @@
 
 
     /* =========================
-       LOGOUT
+       WYLOGOWANIE
     ========================= */
 
     logoutBtn.addEventListener("click", async () => {
@@ -808,7 +808,7 @@
 
         throw new Error(
           result.error?.message ||
-          "Ошибка загрузки изображения"
+          "Błąd przesyłania obrazu"
         );
 
       }
@@ -819,7 +819,7 @@
 
 
     /* =========================
-       PHOTO PREVIEW
+       PODGLĄD ZDJĘCIA
     ========================= */
 
     dishPhoto.addEventListener("change", () => {
@@ -840,7 +840,7 @@
 
 
     /* =========================
-       ADD / EDIT
+       DODAJ / EDYTUJ
     ========================= */
 
     dishForm.addEventListener("submit", async (e) => {
@@ -850,14 +850,14 @@
       const user = auth.currentUser;
 
       if (!user) {
-        alert("Сначала войдите в админ-панель.");
+        alert("Najpierw zaloguj się do panelu administratora.");
         return;
       }
 
       saveBtn.disabled = true;
 
       formMessage.textContent =
-        "Сохранение...";
+        "Zapisywanie...";
 
       try {
 
@@ -866,7 +866,7 @@
         if (dishPhoto.files[0]) {
 
           formMessage.textContent =
-            "Загрузка фотографии...";
+            "Przesyłanie zdjęcia...";
 
           imageUrl =
             await uploadImage(
@@ -898,7 +898,7 @@
         };
 
 
-        /* EDIT */
+        /* EDYCJA */
 
         if (editingId) {
 
@@ -916,11 +916,11 @@
           );
 
           formMessage.textContent =
-            "Блюдо обновлено.";
+            "Pozycja zaktualizowana.";
 
         }
 
-        /* ADD */
+        /* DODAWANIE */
 
         else {
 
@@ -943,7 +943,7 @@
           );
 
           formMessage.textContent =
-            "Блюдо добавлено.";
+            "Pozycja dodana.";
 
         }
 
@@ -955,7 +955,7 @@
         console.error(error);
 
         formMessage.textContent =
-          "Ошибка: " +
+          "Błąd: " +
           error.message;
 
       }
@@ -966,7 +966,7 @@
 
 
     /* =========================
-       LOAD DISHES
+       ŁADOWANIE POZYCJI
     ========================= */
 
     function loadDishes() {
@@ -987,7 +987,7 @@
 
             dishesList.innerHTML = `
               <div class="loading">
-                Блюд пока нет.
+                Brak pozycji w menu.
               </div>
             `;
 
@@ -1026,7 +1026,7 @@
 
                 : `
                   <div class="no-image">
-                    Нет фотографии
+                    Brak zdjęcia
                   </div>
                 `;
 
@@ -1040,7 +1040,7 @@
                 <div class="dish-top">
 
                   <h3 class="dish-title">
-                    ${escapeHTML(item.title || "Без названия")}
+                    ${escapeHTML(item.title || "Bez nazwy")}
                   </h3>
 
                   <div class="dish-price">
@@ -1054,8 +1054,8 @@
 
                   ${
                     item.category === "coffee"
-                      ? "☕ Кофе"
-                      : "🥐 Выпечка"
+                      ? "☕ Kawa"
+                      : "🥐 Wypieki"
                   }
 
                   ${
@@ -1078,14 +1078,14 @@
                     class="edit-btn"
                     data-id="${item.id}"
                   >
-                    Изменить
+                    Edytuj
                   </button>
 
                   <button
                     class="delete-btn"
                     data-id="${item.id}"
                   >
-                    Удалить
+                    Usuń
                   </button>
 
                 </div>
@@ -1100,7 +1100,7 @@
           });
 
 
-          /* EDIT BUTTONS */
+          /* PRZYCISKI EDYCJI */
 
           document
             .querySelectorAll(".edit-btn")
@@ -1124,7 +1124,7 @@
             });
 
 
-          /* DELETE BUTTONS */
+          /* PRZYCISKI USUWANIA */
 
           document
             .querySelectorAll(".delete-btn")
@@ -1142,7 +1142,7 @@
 
                   const confirmed =
                     confirm(
-                      `Удалить "${item.title || "это блюдо"}"?`
+                      `Czy na pewno chcesz usunąć "${item.title || "tę pozycję"}"?`
                     );
 
                   if (!confirmed) {
@@ -1163,7 +1163,7 @@
                     console.error(error);
 
                     alert(
-                      "Ошибка удаления: " +
+                      "Błąd podczas usuwania: " +
                       error.message
                     );
 
@@ -1182,7 +1182,7 @@
 
           dishesList.innerHTML = `
             <div class="loading">
-              Ошибка загрузки блюд.
+              Błąd podczas ładowania pozycji.
             </div>
           `;
 
@@ -1193,7 +1193,7 @@
 
 
     /* =========================
-       EDIT DISH
+       EDYCYA POZYCJI
     ========================= */
 
     function editDish(id, item) {
@@ -1240,10 +1240,10 @@
 
 
       formTitle.textContent =
-        "Редактировать блюдо";
+        "Edytuj pozycję";
 
       saveBtn.textContent =
-        "Сохранить изменения";
+        "Zapisz zmiany";
 
       cancelEditBtn.style.display =
         "block";
@@ -1258,7 +1258,7 @@
 
 
     /* =========================
-       CANCEL EDIT
+       ANULOWANIE EDYCJI
     ========================= */
 
     cancelEditBtn.addEventListener(
@@ -1272,7 +1272,7 @@
 
 
     /* =========================
-       RESET FORM
+       RESET FORMULARZA
     ========================= */
 
     function resetForm() {
@@ -1292,10 +1292,10 @@
         "none";
 
       formTitle.textContent =
-        "Добавить блюдо";
+        "Dodaj pozycję";
 
       saveBtn.textContent =
-        "Добавить блюдо";
+        "Dodaj pozycję";
 
       cancelEditBtn.style.display =
         "none";
