@@ -1,0 +1,637 @@
+<!DOCTYPE html><html lang="pl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Bakery — Menu</title><link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Playfair+Display:wght@600;700;800&display=swap" rel="stylesheet"><style>
+*{
+  box-sizing:border-box;
+  margin:0;
+  padding:0;
+}
+
+body{
+  font-family:'Cormorant Garamond',serif;
+  background:#E8EEF3;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  padding:20px 10px;
+}
+
+.navbar{
+  width:100%;
+  max-width:600px;
+  background:rgba(255,255,255,.97);
+  padding:15px 25px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-radius:12px 12px 0 0;
+  box-shadow:0 2px 10px rgba(0,0,0,.06);
+  position:relative;
+  z-index:20;
+}
+
+.brand{
+  font-family:'Playfair Display',serif;
+  font-weight:700;
+  font-size:1.1rem;
+  letter-spacing:1px;
+  text-transform:uppercase;
+  color:#2D2522;
+  text-decoration:none;
+}
+
+.nav-links{
+  display:flex;
+  gap:15px;
+  list-style:none;
+}
+
+.nav-links a{
+  text-decoration:none;
+  color:#726A66;
+  font-weight:600;
+  font-size:.95rem;
+  text-transform:uppercase;
+  letter-spacing:1px;
+  transition:.25s ease;
+}
+
+.nav-links a:hover,
+.nav-links a.active{
+  color:#8C6A5A;
+  border-bottom:2px solid #8C6A5A;
+}
+
+.menu-page{
+  width:100%;
+  max-width:600px;
+  min-height:800px;
+  padding:30px;
+  background:#fff;
+  border-radius:0 0 12px 12px;
+  box-shadow:0 10px 30px rgba(0,0,0,.08);
+  position:relative;
+  overflow:hidden;
+}
+
+.page-title-box{
+  position:relative;
+  z-index:5;
+  display:inline-block;
+  padding:12px 25px;
+  margin:10px 0 0 15px;
+  background:rgba(234,227,220,.94);
+  box-shadow:0 6px 18px rgba(0,0,0,.08);
+}
+
+.page-title{
+  font-family:'Playfair Display',serif;
+  font-size:2.2rem;
+  font-weight:700;
+  letter-spacing:3px;
+  color:#221D1B;
+  text-transform:uppercase;
+  line-height:1.1;
+}
+
+.photo-area{
+  position:absolute;
+  top:100px;
+  left:30px;
+  right:30px;
+  height:610px;
+  overflow:hidden;
+  border-radius:6px;
+  z-index:1;
+  box-shadow:0 12px 30px rgba(0,0,0,.15);
+}
+
+.bg-photo{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  z-index:1;
+  transform:scale(1.02);
+}
+
+.photo-overlay{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  background:linear-gradient(
+    to right,
+    rgba(0,0,0,.08),
+    rgba(0,0,0,.02)
+  );
+}
+
+.menu-card{
+  position:relative;
+  z-index:4;
+  margin:100px 0 0 auto;
+  width:72%;
+  background:rgba(255,255,255,.84);
+  backdrop-filter:blur(7px);
+  -webkit-backdrop-filter:blur(7px);
+  padding:28px 24px;
+  box-shadow:0 12px 30px rgba(0,0,0,.16);
+  max-height:500px;
+  overflow-y:auto;
+}
+
+.menu-card::-webkit-scrollbar{
+  width:5px;
+}
+
+.menu-card::-webkit-scrollbar-thumb{
+  background:#CBB7AA;
+  border-radius:10px;
+}
+
+.menu-list{
+  list-style:none;
+}
+
+.menu-item{
+  margin-bottom:20px;
+  border-bottom:1px solid rgba(147,113,97,.25);
+  padding-bottom:12px;
+  cursor:pointer;
+  transition:transform .2s ease,opacity .2s ease;
+}
+
+.menu-item:hover{
+  transform:translateX(5px);
+  opacity:.85;
+}
+
+.menu-item:last-child{
+  border-bottom:none;
+  margin-bottom:0;
+}
+
+.item-header{
+  display:flex;
+  justify-content:space-between;
+  align-items:baseline;
+  gap:10px;
+}
+
+.item-name{
+  font-size:1.25rem;
+  font-weight:600;
+  color:#795B4D;
+}
+
+.item-price{
+  font-size:1.15rem;
+  color:#756B65;
+  font-weight:600;
+  white-space:nowrap;
+}
+
+.item-desc{
+  font-size:.9rem;
+  color:#6F6863;
+  margin-top:4px;
+  line-height:1.3;
+}
+
+.item-weight{
+  font-size:.8rem;
+  color:#8C6A5A;
+  margin-top:4px;
+  font-weight:600;
+}
+
+.empty-message{
+  text-align:center;
+  color:#756B65;
+  padding:30px 10px;
+  font-size:1rem;
+}
+
+.modal-overlay{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  backdrop-filter:blur(5px);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+  opacity:0;
+  pointer-events:none;
+  transition:opacity .3s ease;
+  padding:15px;
+}
+
+.modal-overlay.active{
+  opacity:1;
+  pointer-events:auto;
+}
+
+.modal-card{
+  background:#fff;
+  width:90%;
+  max-width:400px;
+  max-height:90vh;
+  overflow:auto;
+  padding:25px;
+  border-radius:12px;
+  box-shadow:0 15px 35px rgba(0,0,0,.25);
+  transform:translateY(20px) scale(.95);
+  transition:transform .3s ease;
+  position:relative;
+  text-align:center;
+}
+
+.modal-overlay.active .modal-card{
+  transform:translateY(0) scale(1);
+}
+
+.modal-img{
+  width:100%;
+  height:220px;
+  object-fit:cover;
+  border-radius:8px;
+  margin-bottom:15px;
+}
+
+.modal-title{
+  font-family:'Playfair Display',serif;
+  font-size:1.6rem;
+  color:#221D1B;
+  margin-bottom:5px;
+}
+
+.modal-weight{
+  font-size:1rem;
+  color:#8C6A5A;
+  font-weight:600;
+  margin-bottom:10px;
+}
+
+.modal-price{
+  font-size:1.3rem;
+  font-weight:700;
+  color:#937161;
+  margin-bottom:15px;
+}
+
+.modal-desc{
+  font-size:.95rem;
+  color:#726A66;
+  line-height:1.4;
+}
+
+.close-btn{
+  position:absolute;
+  top:8px;
+  right:13px;
+  background:rgba(255,255,255,.85);
+  border:0;
+  border-radius:50%;
+  width:34px;
+  height:34px;
+  font-size:1.7rem;
+  color:#6F6863;
+  cursor:pointer;
+  z-index:5;
+}
+
+@media(max-width:700px){
+
+  body{
+    padding:10px 0;
+  }
+
+  .navbar{
+    border-radius:0;
+    padding:14px 18px;
+  }
+
+  .brand{
+    font-size:.95rem;
+  }
+
+  .nav-links{
+    gap:9px;
+  }
+
+  .nav-links a{
+    font-size:.72rem;
+    letter-spacing:.7px;
+  }
+
+  .menu-page{
+    min-height:760px;
+    padding:20px 15px;
+    border-radius:0;
+  }
+
+  .page-title-box{
+    margin-left:5px;
+    padding:10px 18px;
+  }
+
+  .page-title{
+    font-size:1.65rem;
+    letter-spacing:2px;
+  }
+
+  .photo-area{
+    top:90px;
+    left:15px;
+    right:15px;
+    height:590px;
+  }
+
+  .menu-card{
+    width:88%;
+    margin:85px auto 0;
+    padding:24px 18px;
+    max-height:500px;
+    background:rgba(255,255,255,.82);
+  }
+
+  .item-name{
+    font-size:1.12rem;
+  }
+
+  .item-price{
+    font-size:1rem;
+  }
+
+  .item-desc{
+    font-size:.82rem;
+  }
+
+  .modal-card{
+    width:94%;
+    padding:20px;
+  }
+
+  .modal-img{
+    height:200px;
+  }
+}
+</style></head><body><nav class="navbar">
+  <a href="index.html" class="brand">Bakery</a>  <ul class="nav-links">
+    <li><a href="index.html">Główna</a></li>
+    <li><a href="menu.html" class="active">Menu</a></li>
+    <li><a href="coffee.html">Kawa</a></li>
+  </ul>
+</nav><div class="menu-page">  <div class="page-title-box">
+    <h1 class="page-title">
+      PIECZYWO<br>
+      I WYPIEKI
+    </h1>
+  </div>  <div class="photo-area"><img
+  class="bg-photo"
+  id="bgPhoto"
+  src="https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop"
+  alt="Pieczywo">
+
+<div class="photo-overlay"></div>
+
+  </div>  <div class="menu-card"><ul class="menu-list" id="menuList">
+  <li class="empty-message">
+    Ładowanie menu...
+  </li>
+</ul>
+
+  </div></div><div class="modal-overlay" id="dishModal">  <div class="modal-card"><button class="close-btn" id="closeModal">&times;</button>
+
+<img src="" alt="Zdjęcie produktu" class="modal-img" id="modalImg">
+
+<h2 class="modal-title" id="modalTitle"></h2>
+
+<div class="modal-weight" id="modalWeight"></div>
+
+<div class="modal-price" id="modalPrice"></div>
+
+<p class="modal-desc" id="modalDesc"></p>
+
+  </div></div><script type="module">
+
+import {
+  initializeApp
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-app.js";
+
+import {
+  getDatabase,
+  ref,
+  onValue
+} from "https://www.gstatic.com/firebasejs/10.8.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey:"AIzaSyDMCP6zNsRqw6fH4DBNUTG-Nqq_T_hUXv4",
+  authDomain:"caffe-23.firebaseapp.com",
+  databaseURL:"https://caffe-23-default-rtdb.europe-west1.firebasedatabase.app",
+  projectId:"caffe-23",
+  storageBucket:"caffe-23.firebasestorage.app",
+  messagingSenderId:"768137369524",
+  appId:"1:768137369524:web:50e6c4297a6af9cd4644e1",
+  measurementId:"G-DBJ0E90LP9"
+};
+
+const app=initializeApp(firebaseConfig);
+const db=getDatabase(app);
+
+const menuList=document.getElementById("menuList");
+const modal=document.getElementById("dishModal");
+const closeModal=document.getElementById("closeModal");
+const modalImg=document.getElementById("modalImg");
+const modalTitle=document.getElementById("modalTitle");
+const modalWeight=document.getElementById("modalWeight");
+const modalPrice=document.getElementById("modalPrice");
+const modalDesc=document.getElementById("modalDesc");
+
+closeModal.addEventListener("click",()=>{
+  modal.classList.remove("active");
+});
+
+modal.addEventListener("click",(event)=>{
+  if(event.target===modal){
+    modal.classList.remove("active");
+  }
+});
+
+document.addEventListener("keydown",(event)=>{
+  if(event.key==="Escape"){
+    modal.classList.remove("active");
+  }
+});
+
+function formatPrice(price){
+
+  if(price===null || price===undefined || price===""){
+    return "0 zł";
+  }
+
+  let value=String(price).trim();
+
+  if(
+    !value.toLowerCase().includes("zł") &&
+    !value.toLowerCase().includes("zl")
+  ){
+    value+=" zł";
+  }
+
+  return value;
+}
+
+function escapeHTML(value){
+
+  return String(value)
+    .replace(/&/g,"&amp;")
+    .replace(/</g,"&lt;")
+    .replace(/>/g,"&gt;")
+    .replace(/"/g,"&quot;")
+    .replace(/'/g,"&#039;");
+}
+
+function renderDishes(dishes){
+
+  menuList.innerHTML="";
+
+  if(!dishes.length){
+
+    menuList.innerHTML=`
+      <li class="empty-message">
+        Brak produktów w tej kategorii.
+      </li>
+    `;
+
+    return;
+  }
+
+  dishes.forEach((item)=>{
+
+    const li=document.createElement("li");
+    li.className="menu-item";
+
+    const price=formatPrice(item.price);
+
+    const weight=item.weight
+      ? `${item.weight} g`
+      : "";
+
+    li.innerHTML=`
+
+      <div class="item-header">
+        <span class="item-name">
+          ${escapeHTML(item.title || "")}
+        </span>
+
+        <span class="item-price">
+          ${escapeHTML(price)}
+        </span>
+      </div>
+
+      ${
+        item.description
+        ? `
+          <div class="item-desc">
+            ${escapeHTML(item.description)}
+          </div>
+        `
+        : ""
+      }
+
+      ${
+        weight
+        ? `
+          <div class="item-weight">
+            ${escapeHTML(weight)}
+          </div>
+        `
+        : ""
+      }
+    `;
+
+    li.addEventListener("click",()=>{
+
+      const image=item.imageUrl ||
+        "https://images.unsplash.com/photo-1509440159596-0249088772ff?q=80&w=1200&auto=format&fit=crop";
+
+      /*
+        Zdjęcie tła NIE jest zmieniane.
+        Zdjęcie produktu pojawia się tylko w oknie modalnym.
+      */
+
+      modalImg.src=image;
+      modalTitle.textContent=item.title || "";
+      modalWeight.textContent=item.weight
+        ? `${item.weight} g`
+        : "";
+      modalPrice.textContent=price;
+      modalDesc.textContent=item.description || "";
+
+      modal.classList.add("active");
+    });
+
+    menuList.appendChild(li);
+  });
+}
+
+const dishesRef=ref(db,"dishes");
+
+onValue(
+  dishesRef,
+  (snapshot)=>{
+
+    const data=snapshot.val();
+    const dishes=[];
+
+    if(data){
+
+      Object.entries(data).forEach(([id,item])=>{
+
+        if(item && item.category==="bread"){
+
+          dishes.push({
+            id,
+            title:item.title || "",
+            category:item.category || "",
+            price:item.price || "",
+            weight:item.weight ?? null,
+            description:item.description || "",
+            imageUrl:item.imageUrl || "",
+            createdAt:item.createdAt || ""
+          });
+
+        }
+
+      });
+
+    }
+
+    dishes.sort((a,b)=>{
+      return String(b.createdAt)
+        .localeCompare(String(a.createdAt));
+    });
+
+    renderDishes(dishes);
+  },
+
+  (error)=>{
+
+    console.error("Firebase error:",error);
+
+    menuList.innerHTML=`
+      <li class="empty-message">
+        Błąd podczas ładowania menu.
+      </li>
+    `;
+  }
+);
+
+</script></body>
+</html>
